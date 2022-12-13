@@ -1,0 +1,73 @@
+{{define "apikeys/edit"}}
+
+{{$authApp := .authApp}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="apikeys-edit" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <form method="POST" action="/realm/apikeys/{{$authApp.ID}}">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header">
+          <i class="bi bi-key me-2"></i>
+          Details
+        </div>
+
+        <div class="card-body">
+          {{template "errorSummary" $authApp}}
+
+          <input type="hidden" name="_method" value="PATCH">
+          {{ .csrfField }}
+
+          <div class="row g-3">
+            <div class="col-lg-12">
+              <div class="form-floating">
+                <input type="text" id="name" name="name" class="form-control {{invalidIf ($authApp.ErrorsFor "name")}}"
+                  value="{{$authApp.Name}}" autofocus>
+                <label for="name">Application name</label>
+                {{template "errorable" $authApp.ErrorsFor "name"}}
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="form-group">
+                <select class="form-control" name="type" id="type" disabled>
+                  <option selected>
+                    {{if (eq $authApp.APIKeyType 0)}}
+                      Device (can verify codes)
+                    {{else if (eq $authApp.APIKeyType 1)}}
+                      Admin (can issue codes)
+                    {{else}}
+                      Unknown
+                    {{end}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex flex-column align-items-stretch align-items-lg-center flex-lg-row-reverse justify-content-lg-between">
+          <div class="d-grid d-lg-inline">
+            <button type="submit" id="submit" class="btn btn-primary">Update API key</button>
+          </div>
+          <div class="d-grid d-lg-inline">
+            <a href="/realm/apikeys/{{$authApp.ID}}" class="btn btn-danger mt-2 mt-lg-0">
+              Cancel
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
+{{end}}

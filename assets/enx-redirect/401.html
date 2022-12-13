@@ -1,0 +1,20 @@
+{{define "401"}}
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="unauthorized" class="my-4 g-4">
+  <main role="main" class="container">
+    <h1>{{t $.locale "static.unauthorized"}}</h1>
+    <p>
+      {{t $.locale "static.unauthorized-message"}}
+    </p>
+    <div class="d-flex justify-content-center">
+      <a href="https://g.co/ens" class="small text-decoration-none text-muted">{{t $.locale "login.about-exposure-notifications"}}</a>
+    </div>
+  </main>
+</body>
+</html>
+{{end}}

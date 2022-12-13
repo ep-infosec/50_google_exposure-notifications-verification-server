@@ -1,0 +1,81 @@
+{{define "admin/users/show"}}
+
+{{$user := .user}}
+{{$memberships := .memberships}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="admin-users-show" class="tab-content">
+  {{template "admin/navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-person me-2"></i>
+        Details
+      </div>
+
+      <div class="card-body">
+        <h6 class="mb-2">Name</h6>
+        <div id="user-name" class="form-group">
+          {{$user.Name}}
+        </div>
+
+        <hr>
+        <h6 class="mb-2">Email</h6>
+        <div id="user-email" class="form-group">
+          {{$user.Email}}
+        </div>
+
+        <hr>
+        <h6 class="mb-2">Password</h6>
+        <div class="form-group">
+          Password was last changed <span class="text-info">{{$user.PasswordAgeString}}</span> ago.
+        </div>
+
+        {{if $user.SystemAdmin}}
+        <hr>
+        <h6 class="mb-2">System admin</h6>
+        <div class="form-group text-success">Enabled</div>
+        {{end}}
+      </div>
+    </div>
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-house-door me-2"></i>
+        Member of realms
+      </div>
+
+      {{if $memberships}}
+        <ul class="list-group list-group-flush">
+          {{range $membership := $memberships}}
+            {{$realm := $membership.Realm}}
+            {{$user := $membership.User}}
+            <li class="list-group-item d-flex justify-content-between">
+              <span>{{$realm.Name}}</span>
+
+              <a href="/admin/realms/{{$realm.ID}}/remove/{{$user.ID}}" class="text-danger"
+                data-bs-toggle="tooltip" title="Remove from realm"
+                data-method="PATCH" data-confirm="Are you sure you want to remove {{$membership.User.Name}} from {{$realm.Name}}?">
+                <i class="bi bi-trash"></i>
+              </a>
+            </li>
+          {{end}}
+        </ul>
+      {{else}}
+        <p class="card-body text-center mb-0">
+          <em>This user is not a member of any realms.</em>
+        </p>
+      {{end}}
+    </div>
+  </main>
+</body>
+</html>
+{{end}}

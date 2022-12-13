@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "login.about-exposure-notifications"
+msgstr "Informationen zu COVID-19-Benachrichtigungen"
+
+#
+# static pages
+# ----------
+
+
+msgid "static.not-found"
+msgstr "Nicht gefunden"
+
+msgid "static.resource-does-not-exist"
+msgstr "Diese Ressource ist nicht vorhanden."
+
+msgid "static.redirect-not-found"
+msgstr "Klicken Sie auf den Link auf Ihrem Mobilgerät, um einen COVID-19-Benachrichtigungscode einzulösen."
+
+msgid "static.unauthorized"
+msgstr "Nicht berechtigt"
+
+msgid "static.unauthorized-message"
+msgstr "Sie sind nicht berechtigt, diese Aktion auszuführen."
+
+#
+# User report webview
+# ----------
+
+
+msgid "user-report.title"
+msgstr "Bestätigungscode anfordern"
+
+msgid "user-report.navbar"
+msgstr "Bestätigungscode über COVID-19-Benachrichtigungen anfordern"
+
+msgid "user-report.request-code-from"
+msgstr "Bestätigungscode anfordern"
+
+msgid "user-report.instructions"
+msgstr "Wenn Sie positiv auf COVID-19 getestet wurden, aber von Ihrer Gesundheitsbehörde keinen Code per SMS oder Anruf erhalten haben, können Sie ihn hier anfordern."
+
+msgid "user-report.enter-date-instructions"
+msgstr "Geben Sie das Datum Ihres COVID-19-Tests ein."
+
+msgid "user-report.phone-number-header"
+msgstr "Ihre Mobiltelefonnummer"
+
+msgid "user-report.phone-number-instructions"
+msgstr "Sie müssen eine gültige Telefonnummer eingeben, um einen Bestätigungscode zu erhalten. Es können Gebühren bei Ihrem Mobilfunkanbieter anfallen."
+
+msgid "user-report.agreement-header"
+msgstr "Vereinbarung"
+
+msgid "user-report.agreement"
+msgstr "Ich bestätige, dass ich ein positives Testergebnis für COVID-19 erhalten habe und die Telefonnummer, die ich angegeben habe, mir gehört. Ich fordere hiermit einen Code an, um mein positives Testergebnis zu melden."
+
+msgid "user-report.request-button"
+msgstr "Weiter"
+
+msgid "user-report.code-issued"
+msgstr "Bestätigungscode ausgestellt"
+
+msgid "user-report.check-mobile-device"
+msgstr "Bitte prüfen Sie, ob Sie eine SMS auf Ihrem Mobilgerät erhalten haben."
+
+msgid "user-report.invalid-request"
+msgstr "Ungültige Anfrage. Bitte über die App „COVID-19-Benachrichtigungen“ auf Ihrem Mobilgerät starten."
+
+msgid "user-report.not-available"
+msgstr "Ihre lokale Gesundheitsbehörde akzeptiert derzeit keine von Nutzern initiierten Meldungen."
+
+msgid "user-report.missing-agreement"
+msgstr "Sie müssen den Bedingungen zustimmen, um einen Bestätigungscode anzufordern."
+
+msgid "user-report.error-invalid-date"
+msgstr "Das Datum des COVID-19-Tests ist ungültig."
+
+msgid "user-report.error-missing-phone"
+msgstr "Eine Mobiltelefonnummer ist erforderlich."
+
+msgid "user-report.error-invalid-phone"
+msgstr "Die Mobiltelefonnummer ist ungültig."
+
+msgid "user-report.quota-exceeded"
+msgstr "Vorübergehend können keine Bestätigungscodes ausgestellt werden. Bitte versuchen Sie es später noch einmal."
+
+msgid "user-report.phone-not-eligible"
+msgstr "Ihre Telefonnummer kann momentan nicht für Nutzermeldungen verwendet werden."
+
+msgid "user-report.internal-error"
+msgstr "Ein interner Fehler ist aufgetreten. Derzeit können keine Bestätigungscodes angefordert werden."
+
+msgid "user-report.unable-to-issue"
+msgstr "Wir konnten keinen Bestätigungscode an Sie senden."
+
+msgid "user-report.code-device-throttled"
+msgstr "Sie haben den Code zu oft angefordert. Bitte wenden Sie sich an die zuständige Gesundheitsbehörde, wenn Sie noch einen Code benötigen."
+
+msgid "user-report.testing-date-label"
+msgstr "Datum Ihres COVID-19-Tests"
+
+msgid "user-report.phone-storage"
+msgstr "Möglicherweise wird eine kryptografisch geschützte Version Ihrer Telefonnummer gespeichert, um weitere Einreichungen zu verhindern."
+
+msgid "user-report.learn-more"
+msgstr "Weitere Informationen…"
+
+msgid "user-report.header"
+msgstr "Helfen Sie dabei, andere bei möglichen Begegnungen mit infizierten Personen zu benachrichtigen"
+
+msgid "user-report.phone-number-placeholder"
+msgstr "XXX XXX XXXX"
+

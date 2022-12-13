@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "login.about-exposure-notifications"
+msgstr "لمحة عن نظام إشعارات التعرّض لفيروس كورونا"
+
+#
+# static pages
+# ----------
+
+
+msgid "static.not-found"
+msgstr "لم يتم العثور على العنصر"
+
+msgid "static.resource-does-not-exist"
+msgstr "ذلك المورد غير متوفر"
+
+msgid "static.redirect-not-found"
+msgstr "لاستخدام رمز إشعارات التعرّض لفيروس كورونا، يُرجى الانتقال إلى الرابط على جهازك الجوّال"
+
+msgid "static.unauthorized"
+msgstr "غير مسموح لك"
+
+msgid "static.unauthorized-message"
+msgstr "غير مسموح لك بتنفيذ ذلك الإجراء"
+
+#
+# User report webview
+# ----------
+
+
+msgid "user-report.title"
+msgstr "الحصول على رمز إثبات الهوية"
+
+msgid "user-report.navbar"
+msgstr "طلب رمز إثبات الهوية بشأن إشعارات التعرّض لفيروس كورونا"
+
+msgid "user-report.request-code-from"
+msgstr "الحصول على رمز إثبات الهوية"
+
+msgid "user-report.instructions"
+msgstr "إذا ثبتت إصابتك بفيروس كورونا المستجد (كوفيد-19) ولكنك لم تتلقَ رمزًا من هيئة الصحة العامة عبر رسالة نصية أو مكالمة هاتفية، يمكنك طلب رمز من هنا"
+
+msgid "user-report.enter-date-instructions"
+msgstr "أدخِل تاريخ إجراء اختبار فيروس كورونا المستجد (كوفيد-19)"
+
+msgid "user-report.phone-number-header"
+msgstr "رقم هاتفك الجوّال"
+
+msgid "user-report.phone-number-instructions"
+msgstr "يجب إدخال رقم هاتف صالح لتلقّي رمز إثبات الهوية. وقد يتم تحصيل رسوم من قِبل مشغّل شبكة الجوّال"
+
+msgid "user-report.agreement-header"
+msgstr "الاتفاقية"
+
+msgid "user-report.agreement"
+msgstr "أقرّ بأن نتيجة اختبار فيروس كورونا الخاصة بي إيجابية وأن رقم الهاتف الذي قدّمتُه خاص بي وأودّ تلقّي رمز للإبلاغ عن نتيجة الاختبار الإيجابية الخاصة بي"
+
+msgid "user-report.request-button"
+msgstr "متابعة"
+
+msgid "user-report.code-issued"
+msgstr "تم إصدار رمز إثبات الهوية"
+
+msgid "user-report.check-mobile-device"
+msgstr "يُرجى التحقّق من الرسائل النصية على جهازك الجوّال"
+
+msgid "user-report.invalid-request"
+msgstr "الطلب غير صالح، يُرجى تقديمه من تطبيق إشعارات التعرّض لفيروس كورونا على جهازك الجوّال"
+
+msgid "user-report.not-available"
+msgstr "لا تقبل هيئة الصحة المحلية عمليات إبلاغ المستخدمين في الوقت الحالي"
+
+msgid "user-report.missing-agreement"
+msgstr "يجب الموافقة على البنود لطلب رمز إثبات الهوية"
+
+msgid "user-report.error-invalid-date"
+msgstr "تاريخ اختبار فيروس كورونا المستجد غير صالح"
+
+msgid "user-report.error-missing-phone"
+msgstr "رقم الهاتف الجوّال مطلوب"
+
+msgid "user-report.error-invalid-phone"
+msgstr "رقم الهاتف الجوّال غير صالح"
+
+msgid "user-report.quota-exceeded"
+msgstr "يتعذّر إصدار رموز إثبات الهوية مؤقتًا، يُرجى إعادة المحاولة لاحقًا"
+
+msgid "user-report.phone-not-eligible"
+msgstr "رقم هاتفك لا يصلح حاليًا للإبلاغ كمستخدم"
+
+msgid "user-report.internal-error"
+msgstr "حدث خطأ داخلي. لا يمكن طلب رمز إثبات الهوية في الوقت الحالي"
+
+msgid "user-report.unable-to-issue"
+msgstr "تعذّر إرسال رمز إثبات الهوية إليك"
+
+msgid "user-report.code-device-throttled"
+msgstr "لقد طلبت رمزًا مرات كثيرة جدًا. يُرجى التواصل مع هيئة الصحة في منطقتك إذا كنت لا تزال بحاجة إلى رمز"
+
+msgid "user-report.testing-date-label"
+msgstr "تاريخ إجراء اختبار فيروس كورونا المستجد"
+
+msgid "user-report.phone-storage"
+msgstr "قد يتم تخزين نسخة محمية من رقم هاتفك من خلال تشفيرها لمنع عمليات الإرسال الإضافية"
+
+msgid "user-report.learn-more"
+msgstr "مزيد من المعلومات..."
+
+msgid "user-report.header"
+msgstr "المساعدة في إشعار الآخرين بحالات التعرّض لفيروس كورونا"
+
+msgid "user-report.phone-number-placeholder"
+msgstr "XXX XXX XXXX"
+

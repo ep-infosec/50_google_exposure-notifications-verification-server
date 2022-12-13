@@ -1,0 +1,641 @@
+# Copyright 2020 the Exposure Notifications Verification Server authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# Builds a container image.
+#
+timeout: '1200s'
+options:
+  # N1_HIGHCPU_32 builds faster, but takes much longer to provision.
+  machineType: 'N1_HIGHCPU_8'
+  env:
+  - 'GOPATH=/go'
+  - 'GO111MODULE=on'
+  - 'GOPROXY=https://proxy.golang.org,direct'
+  - 'CGO_ENABLED=0'
+  - 'GOOS=linux'
+  - 'GOARCH=amd64'
+
+substitutions:
+  _BINAUTHZ_ATTESTOR:
+  _BINAUTHZ_KEY_VERSION:
+  _GO_TAGS: 'google'
+  _REPO: 'github.com/google/exposure-notifications-verification-server'
+  _TAG:
+
+steps:
+#
+# Minify static assets
+#
+- id: 'minify-css'
+  name: 'tdewolff/minify:latest'
+  dir: 'assets/server/static/css'
+  entrypoint: '/bin/sh'
+  args:
+  - '-c'
+  - 'mkdir /tmp/css && mv *.css /tmp/css && minify -brvo ./application.css /tmp/css/*.css && rm -rf /tmp/css'
+  waitFor:
+  - '-'
+
+- id: 'minify-js'
+  name: 'tdewolff/minify:latest'
+  dir: 'assets/server/static/js'
+  entrypoint: '/bin/sh'
+  args:
+  - '-c'
+  - 'mkdir /tmp/js && mv *.js /tmp/js && minify -brvo ./application.js /tmp/js/*.js && rm -rf /tmp/js'
+  waitFor:
+  - '-'
+
+
+#
+# build all binaries at once
+#
+- id: 'mkdir-bin'
+  name: 'bash:5'
+  args:
+  - 'mkdir'
+  - 'bin'
+  waitFor:
+  - '-'
+
+- id: 'build'
+  name: 'golang:1.19'
+  args:
+  - 'go'
+  - 'build'
+  - '-tags=${_GO_TAGS}'
+  - '-trimpath'
+  - '-ldflags=-s -w -X=${_REPO}/internal/buildinfo.BuildID=${BUILD_ID} -X=${_REPO}/internal/buildinfo.BuildTag=${_TAG} -extldflags=-static'
+  - '-o=./bin/'
+  - './cmd/...'
+  waitFor:
+  - 'mkdir-bin'
+  - 'minify-css'
+  - 'minify-js'
+
+
+#
+# adminapi
+#
+- id: 'dockerize-adminapi'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/adminapi:${_TAG}'
+  - '--build-arg=SERVICE=adminapi'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-adminapi'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/adminapi:${_TAG}'
+  waitFor:
+  - 'dockerize-adminapi'
+
+- id: 'attest-adminapi'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/adminapi:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-adminapi'
+
+#
+# apiserver
+#
+- id: 'dockerize-apiserver'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/apiserver:${_TAG}'
+  - '--build-arg=SERVICE=apiserver'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-apiserver'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/apiserver:${_TAG}'
+  waitFor:
+  - 'dockerize-apiserver'
+
+- id: 'attest-apiserver'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/apiserver:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-apiserver'
+
+
+#
+# appsync
+#
+- id: 'dockerize-appsync'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/appsync:${_TAG}'
+  - '--build-arg=SERVICE=appsync'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-appsync'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/appsync:${_TAG}'
+  waitFor:
+  - 'dockerize-appsync'
+
+- id: 'attest-appsync'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/appsync:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-appsync'
+
+#
+# backup
+#
+- id: 'dockerize-backup'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/backup:${_TAG}'
+  - '--build-arg=SERVICE=backup'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-backup'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/backup:${_TAG}'
+  waitFor:
+  - 'dockerize-backup'
+
+- id: 'attest-backup'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/backup:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-backup'
+
+#
+# cleanup
+#
+- id: 'dockerize-cleanup'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/cleanup:${_TAG}'
+  - '--build-arg=SERVICE=cleanup'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-cleanup'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/cleanup:${_TAG}'
+  waitFor:
+  - 'dockerize-cleanup'
+
+- id: 'attest-cleanup'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/cleanup:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-cleanup'
+
+
+#
+# e2e-runner
+#
+- id: 'dockerize-e2e-runner'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/e2e-runner:${_TAG}'
+  - '--build-arg=SERVICE=e2e-runner'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-e2e-runner'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/e2e-runner:${_TAG}'
+  waitFor:
+  - 'dockerize-e2e-runner'
+
+- id: 'attest-e2e-runner'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/e2e-runner:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-e2e-runner'
+
+
+#
+# emailer
+#
+- id: 'dockerize-emailer'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/emailer:${_TAG}'
+  - '--build-arg=SERVICE=emailer'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-emailer'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/emailer:${_TAG}'
+  waitFor:
+  - 'dockerize-emailer'
+
+- id: 'attest-emailer'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/emailer:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-emailer'
+
+
+#
+# enx-redirect
+#
+- id: 'dockerize-enx-redirect'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/enx-redirect:${_TAG}'
+  - '--build-arg=SERVICE=enx-redirect'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-enx-redirect'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/enx-redirect:${_TAG}'
+  waitFor:
+  - 'dockerize-enx-redirect'
+
+- id: 'attest-enx-redirect'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/enx-redirect:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-enx-redirect'
+
+
+#
+# migrate
+#
+- id: 'dockerize-migrate'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/migrate.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/migrate:${_TAG}'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-migrate'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/migrate:${_TAG}'
+  waitFor:
+  - 'dockerize-migrate'
+
+- id: 'attest-migrate'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/migrate:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-migrate'
+
+#
+# metrics-registrar
+#
+- id: 'dockerize-metrics-registrar'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/metrics-registrar:${_TAG}'
+  - '--build-arg=SERVICE=metrics-registrar'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-metrics-registrar'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/metrics-registrar:${_TAG}'
+  waitFor:
+  - 'dockerize-metrics-registrar'
+
+- id: 'attest-metrics-registrar'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/metrics-registrar:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-metrics-registrar'
+
+
+#
+# modeler
+#
+- id: 'dockerize-modeler'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/modeler:${_TAG}'
+  - '--build-arg=SERVICE=modeler'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-modeler'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/modeler:${_TAG}'
+  waitFor:
+  - 'dockerize-modeler'
+
+- id: 'attest-modeler'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/modeler:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-modeler'
+
+
+#
+# rotation
+#
+- id: 'dockerize-rotation'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/rotation:${_TAG}'
+  - '--build-arg=SERVICE=rotation'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-rotation'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/rotation:${_TAG}'
+  waitFor:
+  - 'dockerize-rotation'
+
+- id: 'attest-rotation'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/rotation:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-rotation'
+
+
+#
+# server
+#
+- id: 'dockerize-server'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/server:${_TAG}'
+  - '--build-arg=SERVICE=server'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-server'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/server:${_TAG}'
+  waitFor:
+  - 'dockerize-server'
+
+- id: 'attest-server'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/server:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-server'
+
+
+#
+# stats-puller
+#
+- id: 'dockerize-stats-puller'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '--file=builders/service.dockerfile'
+  - '--tag=gcr.io/${PROJECT_ID}/${_REPO}/stats-puller:${_TAG}'
+  - '--build-arg=SERVICE=stats-puller'
+  - '.'
+  waitFor:
+  - 'build'
+
+- id: 'push-stats-puller'
+  name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'gcr.io/${PROJECT_ID}/${_REPO}/stats-puller:${_TAG}'
+  waitFor:
+  - 'dockerize-stats-puller'
+
+- id: 'attest-stats-puller'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:396.0.0'
+  args:
+  - 'bash'
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    ARTIFACT_URL=$(docker inspect gcr.io/${PROJECT_ID}/${_REPO}/stats-puller:${_TAG} --format='{{index .RepoDigests 0}}')
+    gcloud beta container binauthz attestations sign-and-create \
+      --project "${PROJECT_ID}" \
+      --artifact-url "$${ARTIFACT_URL}" \
+      --attestor "${_BINAUTHZ_ATTESTOR}" \
+      --keyversion "${_BINAUTHZ_KEY_VERSION}"
+  waitFor:
+  - 'push-stats-puller'

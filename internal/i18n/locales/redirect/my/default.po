@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Language: my\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "login.about-exposure-notifications"
+msgstr "ထိတွေ့မှု အကြောင်းကြားချက်များအကြောင်း"
+
+#
+# static pages
+# ----------
+
+
+msgid "static.not-found"
+msgstr "မတွေ့ပါ"
+
+msgid "static.resource-does-not-exist"
+msgstr "ဤရင်းမြစ် မရှိပါ။"
+
+msgid "static.redirect-not-found"
+msgstr "ထိတွေ့မှု အကြောင်းကြားချက်များ’ ဆိုင်ရာ ကုဒ်ကို လဲလှယ်ယူရန် သင့်မိုဘိုင်းစက်ကိရိယာရှိ လင့်ခ်ကို ဝင်ကြည့်ပါ"
+
+msgid "static.unauthorized"
+msgstr "ခွင့်ပြုချက်မရှိပါ"
+
+msgid "static.unauthorized-message"
+msgstr "ဤလုပ်ဆောင်ချက်ကို ပြုလုပ်ရန် သင့်တွင် ခွင့်ပြုချက်မရှိပါ။"
+
+#
+# User report webview
+# ----------
+
+
+msgid "user-report.title"
+msgstr "စိစစ်ခြင်းကုဒ်ကို ရယူခြင်း"
+
+msgid "user-report.navbar"
+msgstr "‘ထိတွေ့မှု အကြောင်းကြားချက်များ’ ဆိုင်ရာ စိစစ်ခြင်းကုဒ်ကို တောင်းဆိုပါ"
+
+msgid "user-report.request-code-from"
+msgstr "စိစစ်ခြင်းကုဒ်ကို ရယူခြင်း"
+
+msgid "user-report.instructions"
+msgstr "သင်သည် COVID-19 စစ်ဆေးမှု၌ ပိုးတွေ့ရှိသော်လည်း သင်၏ ‘ကျန်းမာရေးအာဏာပိုင်’ ထံမှ ကုဒ် (သို့) ဖုန်း လက်ခံရရှိခြင်း မရှိပါက ဤနေရာတွင် တောင်းဆိုနိုင်သည်။"
+
+msgid "user-report.enter-date-instructions"
+msgstr "COVID-19 စစ်ဆေးမှု ပြုလုပ်သည့် ရက်စွဲထည့်ပါ"
+
+msgid "user-report.phone-number-header"
+msgstr "သင့်မိုဘိုင်းဖုန်းနံပါတ်"
+
+msgid "user-report.phone-number-instructions"
+msgstr "စိစစ်ခြင်းကုဒ်ကို လက်ခံရရှိရန် မှန်ကန်သော ဖုန်းနံပါတ်တစ်ခုကို ထည့်ရမည်။ မိုဘိုင်းဝန်ဆောင်ခ ကျသင့်နိုင်သည်။"
+
+msgid "user-report.agreement-header"
+msgstr "သဘောတူညီမှု"
+
+msgid "user-report.agreement"
+msgstr "ကျွန်ုပ်သည် COVID-19 စစ်ဆေးမှု၌ ပိုးတွေ့ရှိကြောင်းနှင့် ပေးထားသည့် ဖုန်းနံပါတ်မှာ ကျွန်ုပ်၏ ကိုယ်ပိုင်နံပါတ်ဖြစ်ကြောင်း အသိအမှတ်ပြု လက်ခံပါသည်။ ကျွန်ုပ်၏ ပိုးတွေ့ရှိသော စစ်ဆေးမှုရလဒ်ကို သတင်းပို့ရန် ကုဒ်တစ်ခု ရယူလိုပါသည်။"
+
+msgid "user-report.request-button"
+msgstr "ရှေ့ဆက်ရန်"
+
+msgid "user-report.code-issued"
+msgstr "စိစစ်ခြင်းကုဒ် ထုတ်ပြီးပြီ"
+
+msgid "user-report.check-mobile-device"
+msgstr "သင့်မိုဘိုင်းစက်ကိရိယာရှိ မိုဘိုင်းမက်ဆေ့ဂျ်များကို စစ်ဆေးပါ။"
+
+msgid "user-report.invalid-request"
+msgstr "တောင်းဆိုချက် မမှန်ကန်ပါ။ သင့်မိုဘိုင်းစက်ကိရိယာရှိ ‘ထိတွေ့မှု အကြောင်းကြားချက်များ’ အပလီကေးရှင်းမှ ဖွင့်ပါ။"
+
+msgid "user-report.not-available"
+msgstr "သင့်ဒေသခံ ကျန်းမာရေးအာဏာပိုင်သည် အသုံးပြုသူထံမှ သတင်းပို့မှုများကို ယခုအချိန်တွင် လက်မခံသေးပါ။"
+
+msgid "user-report.missing-agreement"
+msgstr "စိစစ်ခြင်းကုဒ်တောင်းဆိုရန် စည်းမျဉ်းများကို သဘောတူရမည်။"
+
+msgid "user-report.error-invalid-date"
+msgstr "COVID-19 စစ်ဆေးမှုရက်စွဲ မမှန်ကန်ပါ။"
+
+msgid "user-report.error-missing-phone"
+msgstr "မိုဘိုင်းဖုန်းနံပါတ် လိုအပ်သည်။"
+
+msgid "user-report.error-invalid-phone"
+msgstr "မိုဘိုင်းဖုန်းနံပါတ် မမှန်ကန်ပါ။"
+
+msgid "user-report.quota-exceeded"
+msgstr "စိစစ်ခြင်းကုဒ်ကို လောလောဆယ် မထုတ်နိုင်သေးပါ။ နောက်မှ ထပ်စမ်းကြည့်ပါ။"
+
+msgid "user-report.phone-not-eligible"
+msgstr "သင့်ဖုန်းနံပါတ်သည် အသုံးပြုသူ သတင်းပို့ခြင်းအတွက် လက်ရှိတွင် သတ်မှတ်ချက် မပြည့်မီပါ"
+
+msgid "user-report.internal-error"
+msgstr "အတွင်းပိုင်းတွင် အမှားအယွင်း ရှိနေသည်။ စိစစ်ခြင်းကုဒ်ကို ယခုအချိန်တွင် တောင်းဆို၍ မရပါ။"
+
+msgid "user-report.unable-to-issue"
+msgstr "သင့်ထံ စိစစ်ခြင်းကုဒ် မပို့နိုင်ပါ။"
+
+msgid "user-report.code-device-throttled"
+msgstr "သင်သည်ကုဒ်ကို ကြိမ်ဖန်များစွာ တောင်းဆိုထားသည်။ ကုဒ်ကို လိုအပ်သေးပါက သင်၏ ‘ကျန်းမာရေးအာဏာပိုင်’ ကို ဆက်သွယ်ပါ။"
+
+msgid "user-report.testing-date-label"
+msgstr "COVID-19 စစ်ဆေးမှု ပြုလုပ်သည့် ရက်စွဲ"
+
+msgid "user-report.phone-storage"
+msgstr "အသွင်ဝှက်၍ ကာကွယ်ထားသော သင့်ဖုန်းနံပါတ်ပုံစံကို ထပ်မံပေးပို့မှုများ မရှိစေရန် သိမ်းထားနိုင်သည်။"
+
+msgid "user-report.learn-more"
+msgstr "ပိုမိုလေ့လာရန်…"
+
+msgid "user-report.header"
+msgstr "အခြားသူများ၏ ထိတွေ့မှုကို အကြောင်းကြားရန် ကူညီပါ"
+
+msgid "user-report.phone-number-placeholder"
+msgstr "XXX XXX XXXX"
+

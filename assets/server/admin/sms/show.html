@@ -1,0 +1,159 @@
+{{define "admin/sms/show"}}
+
+{{$smsConfig := .smsConfig}}
+{{$smsFromNumbers := .smsFromNumbers}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="admin-sms-show" class="tab-content">
+  {{template "admin/navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <form method="POST" action="/admin/sms" id="sms-form">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header">
+          <i class="bi bi-chat-left-dots me-2"></i>
+          System SMS config
+        </div>
+        <div class="card-body">
+          {{ .csrfField }}
+
+          {{template "errorSummary" $smsConfig}}
+
+          <div class="form-floating mb-3">
+            <input type="text" name="twilio_account_sid" id="twilio-account-sid" class="form-control font-monospace{{if $smsConfig.ErrorsFor "twilioAccountSid"}} is-invalid{{end}}"
+              placeholder="Twilio account" {{if $smsConfig.TwilioAccountSid}}value="{{$smsConfig.TwilioAccountSid}}"{{end}} />
+            <label for="twilio-account-sid">Twilio account</label>
+            {{template "errorable" $smsConfig.ErrorsFor "twilioAccountSid"}}
+            <small class="form-text text-muted">
+              This is the Twilio Account SID. Get this value from the Twilio console.
+            </small>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="password" name="twilio_auth_token" id="twilio-auth-token" class="form-control font-monospace{{if $smsConfig.ErrorsFor "twilioAuthToken"}} is-invalid{{end}}" autocomplete="new-password"
+              placeholder="Twilio auth token" {{if $smsConfig.TwilioAuthToken}}value="{{passwordSentinel}}"{{end}}>
+            <label for="twilio-auth-token">Twilio auth token</label>
+            {{template "errorable" $smsConfig.ErrorsFor "twilioAuthToken"}}
+            <small class="form-text text-muted">
+              This is the Twilio Auth Token. Get this value from the Twilio console.
+            </small>
+          </div>
+
+          <hr />
+
+          <p class="small form-text text-muted">
+            Below are the phone numbers from which messages can be sent.
+            Purchase these numbers using the Twilio console. After sharing the
+            system SMS configuration with a realm, they will be able to choose
+            from these phone numbers. We <strong>strongly recommend</strong>
+            acquiring a toll free number or SMS short code to reduce the chance
+            that messages will be flagged as spam.
+          </p>
+
+          <div id="twilio-from-number-template" class="d-none row g-2 mb-2">
+            <div class="col-sm-3">
+              <div class="form-floating">
+                <input id="template-label" type="text" class="form-control" autocomplete="new-password" placeholder="Label" />
+                <label>Label</label>
+              </div>
+            </div>
+            <div class="col-sm-9 d-flex">
+              <div class="form-floating w-100">
+                <input id="template-from-number" type="tel" class="form-control font-monospace" autocomplete="new-password" placeholder="Phone number" />
+                <label>From number</label>
+              </div>
+              <a href="#" class="d-inline text-secondary mt-3 ms-3">
+                <i class="bi bi-x-circle-fill"></i>
+              </a>
+            </div>
+          </div>
+
+          <div id="twilio-from-numbers-container" data-twilio-from-numbers="{{$smsFromNumbers | toJSON | toBase64}}">
+            <p class="text-center">Loading...</p>
+          </div>
+
+          <p>
+            <small>
+              <a href="#" id="add-phone-number">
+                &plus; Add phone number
+              </a>
+            </small>
+          </p>
+        </div>
+        <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-primary">Update system SMS config</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <script type="text/javascript">
+    window.addEventListener('load', (event) => {
+      let container = document.querySelector('div#twilio-from-numbers-container');
+      let template = document.querySelector('div#twilio-from-number-template');
+      let counter = 0;
+
+      function addRow(id, label, value) {
+        let section = template.cloneNode(true);
+
+        if (id) {
+          let input = document.createElement('input');
+          input.setAttribute('type', 'hidden');
+          input.setAttribute('id', `twilio-from-number-${counter}-id`);
+          input.setAttribute('name', `twilio_from_numbers.${counter}.id`);
+          input.setAttribute('value', id);
+          section.appendChild(input);
+        }
+
+        let templateLabel = section.querySelector('input#template-label');
+        templateLabel.setAttribute('id', `twilio-from-number-${counter}-templateLabel`);
+        templateLabel.setAttribute('name', `twilio_from_numbers.${counter}.label`);
+        templateLabel.value = label;
+        templateLabel.required = true;
+
+        let templateFromNumber = section.querySelector('input#template-from-number');
+        templateFromNumber.setAttribute('id', `twilio-from-number-${counter}-value`);
+        templateFromNumber.setAttribute('name', `twilio_from_numbers.${counter}.value`);
+        templateFromNumber.value = value;
+        templateFromNumber.required = true;
+
+        section.querySelector('a').addEventListener('click', (event) => {
+          event.preventDefault();
+          section.parentNode.removeChild(section);
+        });
+
+        section.classList.remove('d-none');
+        container.appendChild(section);
+
+        // Increment counter for next one.
+        counter++;
+      }
+
+      let addPhoneBtn = document.querySelector('a#add-phone-number');
+      addPhoneBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        addRow(null, null, null);
+      })
+
+      // Load existing records.
+      clearChildren(container)
+      let existingRecords = container.dataset.twilioFromNumbers;
+      if (existingRecords) {
+        let decoded = atob(existingRecords);
+        let data = JSON.parse(decoded);
+        data.forEach(function(record) {
+          addRow(record.id, record.label, record.value);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
+{{end}}

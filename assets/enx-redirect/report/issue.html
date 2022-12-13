@@ -1,0 +1,45 @@
+{{define "report/issue"}}
+
+{{$currentRealm := .realm}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "report/header" .}}
+</head>
+
+<body class="my-4 g-4">
+  <main role="main" class="container">
+    {{if $currentRealm.AgencyImage}}
+    <div id="logo" class="rounded-corners pha-logo" style="background-color: {{$currentRealm.AgencyBackgroundColor}};" >
+      <img src="{{$currentRealm.AgencyImage}}" style="width:80vw; max-width:720px; content-visibility:auto;"
+        loading="lazy" decoding="async"
+        alt="{{$currentRealm.Name}} logo" />
+    </div>
+    {{end}}
+    <h1 class="mb-3">{{t $.locale "user-report.request-code-from"}} {{tDefault $.realmLocale .realm.Name "agencyDisplayName"}}</h1>
+
+    <div class="alert alert-success d-flex align-items-center rounded-corners" role="alert">
+      <svg class="bi flex-shrink-0 me-3" width="24" height="24" role="img" aria-label="Success:">
+        <use xlink:href="/static/icons.svg#check-circle-fill"/>
+      </svg>
+      <div>
+        {{tDefault $.realmLocale (t $.locale "user-report.code-issued") "webReportSuccessMessage"}}
+      </div>
+    </div>
+
+    <p>{{t $.locale "user-report.check-mobile-device"}}</p>
+  </main>
+</body>
+
+
+{{if .webkitClose}}
+<script type="text/javascript">
+window.webkit.messageHandlers.progressObserver.postMessage({
+  "userDidSubmit": true,
+});
+</script>
+{{end}}
+
+</html>
+{{end}}

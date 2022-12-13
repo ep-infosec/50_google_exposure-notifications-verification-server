@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "login.about-exposure-notifications"
+msgstr "À propos des notifications d'exposition"
+
+#
+# static pages
+# ----------
+
+
+msgid "static.not-found"
+msgstr "Introuvable"
+
+msgid "static.resource-does-not-exist"
+msgstr "Cette ressource n'existe pas."
+
+msgid "static.redirect-not-found"
+msgstr "Pour utiliser un code de notifications d'exposition, accédez au lien sur votre appareil mobile."
+
+msgid "static.unauthorized"
+msgstr "Non autorisé"
+
+msgid "static.unauthorized-message"
+msgstr "Vous n'êtes pas autorisé à effectuer cette action."
+
+#
+# User report webview
+# ----------
+
+
+msgid "user-report.title"
+msgstr "Obtenir un code de validation"
+
+msgid "user-report.navbar"
+msgstr "Demander un code de validation de notifications d'exposition"
+
+msgid "user-report.request-code-from"
+msgstr "Obtenir un code de validation"
+
+msgid "user-report.instructions"
+msgstr "Si vous avez été testé positif à la COVID-19, mais que vous n'avez pas reçu de code de la part de votre autorité sanitaire, que ce soit par SMS ou appel téléphonique, vous pouvez en demander un ici."
+
+msgid "user-report.enter-date-instructions"
+msgstr "Saisissez la date de votre test COVID-19"
+
+msgid "user-report.phone-number-header"
+msgstr "Votre numéro de téléphone mobile"
+
+msgid "user-report.phone-number-instructions"
+msgstr "Vous devez saisir un numéro de téléphone valide pour recevoir un code de validation. Des frais d'opérateur peuvent s'appliquer."
+
+msgid "user-report.agreement-header"
+msgstr "Accord"
+
+msgid "user-report.agreement"
+msgstr "Je reconnais avoir reçu un résultat de test positif à la COVID-19. Je confirme que le numéro de téléphone que j'ai fourni est le mien et que je souhaite recevoir un code pour signaler mon résultat de test positif."
+
+msgid "user-report.request-button"
+msgstr "Continuer"
+
+msgid "user-report.code-issued"
+msgstr "Code de validation émis"
+
+msgid "user-report.check-mobile-device"
+msgstr "Veuillez consulter vos SMS sur votre appareil mobile."
+
+msgid "user-report.invalid-request"
+msgstr "Requête non valide. Veuillez lancer votre application de notifications d'exposition sur votre appareil mobile."
+
+msgid "user-report.not-available"
+msgstr "Votre autorité sanitaire locale n'accepte pas les rapports envoyés par les utilisateurs pour le moment."
+
+msgid "user-report.missing-agreement"
+msgstr "Vous devez accepter les conditions d'utilisation pour demander un code de validation"
+
+msgid "user-report.error-invalid-date"
+msgstr "Date de test COVID-19 non valide."
+
+msgid "user-report.error-missing-phone"
+msgstr "Numéro de téléphone mobile requis."
+
+msgid "user-report.error-invalid-phone"
+msgstr "Numéro de téléphone mobile non valide."
+
+msgid "user-report.quota-exceeded"
+msgstr "Nous ne pouvons momentanément pas émettre de codes de validation. Veuillez réessayer plus tard."
+
+msgid "user-report.phone-not-eligible"
+msgstr "Votre numéro de téléphone n'est pas éligible actuellement pour l'envoi de rapports"
+
+msgid "user-report.internal-error"
+msgstr "Erreur interne. Impossible de demander un code de validation pour le moment."
+
+msgid "user-report.unable-to-issue"
+msgstr "Nous n'avons pas pu vous envoyer de code de validation."
+
+msgid "user-report.code-device-throttled"
+msgstr "Vous avez demandé un code trop de fois. Veuillez contacter votre autorité sanitaire si vous avez encore besoin d'un code."
+
+msgid "user-report.testing-date-label"
+msgstr "Date de votre test COVID-19"
+
+msgid "user-report.phone-storage"
+msgstr "Une version de votre numéro de téléphone protégée par cryptographie pourra être stockée pour empêcher des envois supplémentaires."
+
+msgid "user-report.learn-more"
+msgstr "En savoir plus…"
+
+msgid "user-report.header"
+msgstr "Avertir les autres en cas d'exposition"
+
+msgid "user-report.phone-number-placeholder"
+msgstr "XX XX XX XX XX"
+

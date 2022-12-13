@@ -1,0 +1,49 @@
+# Copyright 2020 the Exposure Notifications Verification Server authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# Runs schema migrations.
+#
+
+substitutions:
+  _DB_DEBUG:
+  _DB_ENCRYPTION_KEY:
+  _DB_HOST:
+  _DB_CONN:
+  _DB_NAME:
+  _DB_PASSWORD:
+  _DB_PORT:
+  _DB_SSLMODE:
+  _DB_USER:
+  _LOG_LEVEL:
+  _REPO: 'github.com/google/exposure-notifications-verification-server'
+  _TAG:
+
+steps:
+- id: 'migrate'
+  name: 'gcr.io/${PROJECT_ID}/${_REPO}/migrate:${_TAG}'
+  env:
+  - 'BLOBSTORE=GOOGLE_CLOUD_STORAGE'
+  - 'DB_CONN=${_DB_CONN}'
+  - 'DB_DEBUG=${_DB_DEBUG}'
+  - 'DB_ENCRYPTION_KEY=${_DB_ENCRYPTION_KEY}'
+  - 'DB_HOST=${_DB_HOST}'
+  - 'DB_NAME=${_DB_NAME}'
+  - 'DB_PASSWORD=${_DB_PASSWORD}'
+  - 'DB_PORT=${_DB_PORT}'
+  - 'DB_SSLMODE=${_DB_SSLMODE}'
+  - 'DB_USER=${_DB_USER}'
+  - 'KEY_MANAGER=GOOGLE_CLOUD_KMS'
+  - 'LOG_LEVEL=${_LOG_LEVEL}'
+  - 'SECRET_MANAGER=GOOGLE_SECRET_MANAGER'

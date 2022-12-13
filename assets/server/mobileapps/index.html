@@ -1,0 +1,109 @@
+{{define "mobileapps/index"}}
+
+{{$apps := .apps}}
+
+{{$currentMembership := .currentMembership}}
+{{$canWrite := $currentMembership.Can rbac.MobileAppWrite}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="mobileapps-index" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="card shadow-sm mt-4 mb-3">
+      <div class="card-header">
+        <i class="bi bi-window-sidebar me-2"></i>
+        Mobile apps
+        {{if $canWrite}}
+          <a href="/realm/mobile-apps/new" class="float-end text-secondary" data-bs-toggle="tooltip" title="New mobile app">
+            <i class="bi bi-plus-square-fill"></i>
+          </a>
+        {{end}}
+      </div>
+
+      <div class="card-body">
+        <form method="GET" action="/realm/mobile-apps" id="search-form">
+          <div class="input-group">
+            <input type="search" name="q" id="search" value="{{.query}}" placeholder="Search..."
+              autocomplete="off" class="form-control" />
+            <button type="submit" class="btn btn-secondary">
+              <i class="bi bi-search"></i>
+              <span class="visually-hidden">Search</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {{if $apps}}
+        <table class="table table-bordered table-striped table-fixed table-inner-border-only border-top mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Mobile app</th>
+              <th scope="col" width="100">OS</th>
+              {{if $canWrite}}
+                <th scope="col" width="40"></th>
+              {{end}}
+            </tr>
+          </thead>
+          <tbody>
+          {{range $apps}}
+            <tr id="mobileapp-{{.ID}}">
+              <td>
+                {{if .DeletedAt}}
+                  <span class="bi bi-x-square-fill text-danger me-1"
+                    data-bs-toggle="tooltip" title="Mobile app is disabled - it will be deleted in a few days"></span>
+                {{else}}
+                  <span class="bi bi-check-square-fill text-success me-1"
+                    data-bs-toggle="tooltip" title="Mobile app is enabled"></span>
+                {{end}}
+                <span class="text-truncate">
+                  <a href="/realm/mobile-apps/{{.ID}}">{{.Name}}</a>
+                </span>
+              </td>
+              <td>{{.OS.Display}}</td>
+              {{if $canWrite}}
+                <td class="text-center">
+                  {{if .DeletedAt}}
+                  <a href="/realm/mobile-apps/{{.ID}}/enable" id="enable-mobileapp-{{.ID}}"
+                    class="d-block text-danger"
+                    data-method="patch"
+                    data-confirm="Are you sure you want to enable '{{.Name}}'?"
+                    data-bs-toggle="tooltip"
+                    title="Enable this mobile app">
+                    <i class="bi bi-recycle"></i>
+                  </a>
+                  {{else}}
+                  <a href="/realm/mobile-apps/{{.ID}}/disable" id="disable-mobileapp-{{.ID}}"
+                    class="d-block text-danger"
+                    data-method="patch"
+                    data-confirm="Are you sure you want to disable '{{.Name}}'?"
+                    data-bs-toggle="tooltip"
+                    title="Disable this mobile app">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                  {{end}}
+                </td>
+              {{end}}
+            </tr>
+          {{end}}
+          </tbody>
+        </table>
+      {{else}}
+        <p class="card-body text-center mb-0">
+          <em>There are no mobile apps{{if .query}} that match the query{{end}}.</em>
+        </p>
+      {{end}}
+    </div>
+
+    {{template "shared/pagination" .}}
+  </main>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,66 @@
+{{define "login/verify-email-check"}}
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+  {{template "firebase" .}}
+</head>
+
+<body id="verify-email-check" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="d-flex vh-100">
+      <div class="d-flex w-100 justify-content-center">
+        <div class="login-container">
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <i class="bi bi-envelope me-2"></i>
+              {{t $.locale "account.verify-email-address"}}
+            </div>
+            <div class="card-body">
+              <span id="verify-pending">
+                {{t $.locale "account.verifying-email-address"}}
+              </span>
+              <span id="verify-error" class="d-none text-danger">
+                <i class="bi bi-x-circle-fill small pe-1"></i>
+                {{t $.locale "account.verify-email-address-error"}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="text/javascript">
+    window.addEventListener('load', (event) => {
+      let verifyPending = document.querySelector('span#verify-pending');
+      let verifyError = document.querySelector('span#verify-error');
+      let showError = () => {
+        verifyPending.classList.add('d-none');
+        verifyError.classList.remove('d-none');
+      }
+
+      let urlVars = getUrlVars();
+      let code = urlVars['oobCode'];
+      if (!code) {
+        showError();
+        return;
+      }
+
+      firebase.auth().applyActionCode(code)
+        .then(function(resp) {
+          window.location.assign('/');
+        }).catch(function(err) {
+          console.error(err);
+          showError();
+        });
+    });
+  </script>
+</body>
+</html>
+{{end}}

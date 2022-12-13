@@ -1,0 +1,41 @@
+{{define "flash"}}
+
+{{if .flash}}
+  <div id="alerts-container">
+    <div id="alert-template" class="alert d-none" role="alert">
+      <div class="d-flex align-items-center">
+        <i class="bi me-3"></i>
+        <span class="alert-message"></span>
+      </div>
+    </div>
+
+    {{range $message := .flash.Errors}}
+      <div class="alert alert-danger" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-exclamation-octagon-fill me-3"></i>
+          <span class="alert-message">{{$message}}</span>
+        </div>
+      </div>
+    {{end}}
+
+    {{range $message := .flash.Warnings}}
+      <div class="alert alert-warning" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-exclamation-square-fill me-3"></i>
+          <span class="alert-message">{{$message}}</span>
+        </div>
+      </div>
+    {{end}}
+
+    {{range $message := .flash.Alerts}}
+      <div class="alert alert-success" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-check-square-fill me-3"></i>
+          <span class="alert-message">{{$message}}</span>
+        </div>
+      </div>
+    {{end}}
+  </div>
+{{end}}
+
+{{end}}

@@ -1,0 +1,157 @@
+{{define "admin/info"}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="admin-info" class="tab-content">
+  {{template "admin/navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header">
+        <i class="bi bi-info-square me-2"></i>
+        System information
+      </div>
+      <div class="card-body">
+        <div>
+          <h5 class="mb-3">Build ID</h5>
+          <div>{{.buildID}}</div>
+        </div>
+
+        <div class="mt-3">
+          <h5 class="mb-3">Build tag</h5>
+          <div>{{.buildTag}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header">
+        <i class="bi bi-key me-2"></i>
+        Keys
+      </div>
+      <div class="card-body">
+        {{if $keys := .tokenSigningKeys}}
+          <h5 class="mb-3">Token signing keys</h5>
+          <table class="small table table-bordered table-striped table-fixed mb-0">
+            <thead>
+              <tr>
+                <th width="40"></th>
+                <th width="305">Key ID (kid)</th>
+                <th>Key version</th>
+                <th width="175">Created at</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range $key := $keys}}
+                <tr>
+                  <td class="text-center">
+                    {{if $key.IsActive}}
+                      <i class="bi bi-check" data-bs-toggle="tooltip" title="Active key"></i>
+                    {{end}}
+                  </td>
+                  <td class="font-monospace user-select-all">
+                    {{$key.UUID}}
+                  </td>
+                  <td class="font-monospace user-select-all">
+                    {{$key.KeyVersionID}}
+                  </td>
+                  <td>
+                    <span data-timestamp="{{$key.CreatedAt.Format "1/02/2006 3:04:05 PM UTC"}}">{{$key.CreatedAt.Format "2006-02-01 15:04"}}</span>
+                  </td>
+                </tr>
+              {{end}}
+            </tbody>
+          </table>
+        {{else}}
+          <p class="text-center p-3">not configured</p>
+        {{end}}
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header">
+        <i class="bi bi-shield-lock me-2"></i>
+        Secrets
+      </div>
+      <div class="card-body">
+        {{$marginTop := "0"}}
+        {{range $type, $secretsList := .secrets}}
+          <h5 class="mb-3 mt-{{$marginTop}}">{{$type}}</h5>
+          {{$marginTop = 5}}
+          <table class="small table table-bordered table-striped table-fixed mb-0">
+            <thead>
+              <tr>
+                <th width="40"></th>
+                <th>Reference</th>
+                <th width="175">Created at</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range $secret := $secretsList}}
+                <tr>
+                  <td class="text-center">
+                    {{if $secret.Active}}
+                      <i class="bi bi-check" data-bs-toggle="tooltip" title="Active secret"></i>
+                    {{end}}
+                  </td>
+                  <td class="font-monospace user-select-all">
+                    {{$secret.Reference}}
+                  </td>
+                  <td>
+                    <span data-timestamp="{{$secret.CreatedAt.Format "1/02/2006 3:04:05 PM UTC"}}">{{$secret.CreatedAt.Format "2006-02-01 15:04"}}</span>
+                  </td>
+                </tr>
+              {{end}}
+            </tbody>
+          </table>
+        {{else}}
+          <p class="text-center p-3">not configured</p>
+        {{end}}
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header">
+        <i class="bi bi-gear me-2"></i>
+        Configuration
+      </div>
+      <div class="card-body">
+        <h5 class="mb-3">Features</h5>
+        {{if .featuresMap}}
+          <table class="small table table-bordered table-striped table-fixed mb-0">
+            <thead>
+              <tr>
+                <th width="40"></th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range $name, $value := .featuresMap}}
+                <tr>
+                  <td class="text-center">
+                    {{if $value}}
+                      <i class="bi bi-check" data-bs-toggle="tooltip" title="Enabled"></i>
+                    {{end}}
+                  </td>
+                  <td class="font-monospace user-select-all">
+                    {{$name}}
+                  </td>
+                </tr>
+              {{end}}
+            </tbody>
+          </table>
+        {{else}}
+          <p class="mb-0">No currently active features</p>
+        {{end}}
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+{{end}}

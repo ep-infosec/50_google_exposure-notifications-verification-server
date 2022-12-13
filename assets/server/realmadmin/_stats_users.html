@@ -1,0 +1,74 @@
+{{define "realmadmin/_stats_users"}}
+
+<div class="card shadow-sm mb-3">
+  <div class="card-header">
+    <i class="bi bi-graph-up me-2"></i>
+    Codes issued by user by day
+  </div>
+
+  <div id="per_user_table" class="overflow-auto" style="height:400px">
+    <div class="container d-flex h-100 w-100">
+      <p class="justify-content-center align-self-center text-center font-italic w-100">Loading data...</p>
+    </div>
+  </div>
+
+  <div id="user_row_template" class="d-none">
+    <div class="list-group list-group-flush"></div>
+    <div class="list-group-item list-group-item-action" data-bs-toggle="collapse" aria-expanded="false"></div>
+    <div class="collapse list-group-item p-0 ps-3" data-bs-parent="#per_user_table">
+      <table class="table table-bordered table-striped table-fixed table-inner-border-only border-start mb-0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th width="80">Issued</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- filled in by javascript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <small class="card-footer d-flex justify-content-between text-muted">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#per-user-table-modal">Learn more about this table</a>
+    <span>
+      <span class="me-1">Export as:</span>
+      <a href="/stats/realm/users.csv" class="me-1">CSV</a>
+      <a href="/stats/realm/users.json" target="_blank">JSON</a>
+    </span>
+  </small>
+</div>
+
+<div class="modal fade" id="per-user-table-modal" data-backdrop="static" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Codes issued by user by day</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This table reflects the number of codes issued each day, broken
+          down by user. A user is a human with a username and password who
+          authenticates to this server and issues verification codes.
+          API.
+        </p>
+
+        <p>
+          To see per user statistics for a given date, click on that date
+          in the table. The row will expand to include information about
+          the users that issued codes on that date.
+        </p>
+
+        <p>
+          This graph does <u>not</u> include codes that were issued via
+          the API.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{end}}

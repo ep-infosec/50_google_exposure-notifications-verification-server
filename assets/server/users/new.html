@@ -1,0 +1,37 @@
+{{define "users/new"}}
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="users-new" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <h1>New user</h1>
+    <p>
+      Use the form below to create a new user.
+    </p>
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-person me-2"></i>
+        New user
+      </div>
+
+      <div class="card-body">
+        {{template "errorSummary" .user}}
+        {{template "errorSummary" .userMembership}}
+        {{template "users/_form" .}}
+      </div>
+    </div>
+
+    <a class="card-link" href="/realm/users" id="all-users">&larr; All users</a>
+  </main>
+</body>
+
+</html>
+{{end}}

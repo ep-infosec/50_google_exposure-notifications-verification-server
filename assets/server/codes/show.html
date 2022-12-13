@@ -1,0 +1,91 @@
+{{define "codes/show"}}
+
+{{$currentMembership := .currentMembership}}
+{{$canWrite := $currentMembership.Can rbac.CodeExpire}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="codes-show" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-clock-history me-2"></i>
+        Code status
+      </div>
+      <div class="list-group list-group-flush">
+        <div class="list-group-item">
+          <h5 class="mb-1">UUID</h5>
+          <p class="mb-1 font-monospace user-select-all">{{.code.UUID}}</p>
+        </div>
+        <div class="list-group-item">
+          <h5 class="mb-1">{{.code.IssuerType}}</h5>
+          <p class="mb-1">{{.code.Issuer}}</p>
+        </div>
+        <div class="list-group-item">
+          <h5 class="mb-1">Test type</h5>
+          <p class="mb-1">{{.code.TestType}}</p>
+        </div>
+        <div class="list-group-item">
+          <h5 class="mb-1">Status</h5>
+          <p class="mb-1">{{.code.Status}}</p>
+        </div>
+        {{if not .code.Claimed}}
+          <div class="list-group-item">
+            <h5 class="mb-1">Short code expiry</h5>
+            <span id="code-expires-at" class="sm text-danger"
+              data-countdown-prefix="{{t $.locale "codes.issue.countdown-expires-in"}}"
+              data-countdown-expired="{{t $.locale "codes.issue.countdown-expired"}}">&nbsp;</span>
+          </div>
+          {{if .code.HasLongExpires}}
+            <div class="list-group-item">
+              <h5 class="mb-1">SMS link expiry</h5>
+              <span id="long-code-expires-at" class="sm text-danger"
+                data-countdown-prefix="{{t $.locale "codes.issue.countdown-expires-in"}}"
+                data-countdown-expired="{{t $.locale "codes.issue.countdown-expired"}}">&nbsp;</span>
+            </div>
+          {{end}}
+        {{end}}
+      </div>
+      {{if and $canWrite .code.Expires}}
+        <div class="card-footer d-flex flex-column align-items-stretch align-items-lg-center flex-lg-row-reverse justify-content-lg-between">
+          <div class="d-grid d-lg-inline">
+            <a id="code-expire" href="/codes/{{.code.UUID}}/expire" class="btn btn-danger"
+              data-method="PATCH" data-confirm="Are you sure you want to expire this code?">
+              Invalidate code now
+            </a>
+          </div>
+        </div>
+      {{end}}
+    </div>
+  </main>
+
+  {{if not .code.Claimed}}
+  <script type="text/javascript">
+    window.addEventListener('load', (event) => {
+      let btnInvalidate = document.querySelector('button#invalidate');
+      let expires = {{ .code.Expires }};
+      let longExpires = {{ .code.LongExpires }};
+
+      let codeExpiresAt = document.querySelector('span#code-expires-at');
+      countdown(codeExpiresAt, expires);
+
+      {{if .code.HasLongExpires}}
+        let longCodeExpiresAt = document.querySelector('span#long-code-expires-at');
+        countdown(longCodeExpiresAt, longExpires);
+      {{end}}
+    });
+  </script>
+  {{end}}
+</body>
+
+</html>
+{{end}}

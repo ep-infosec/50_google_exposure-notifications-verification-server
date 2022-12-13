@@ -1,0 +1,28 @@
+{{define "firebase"}}
+{{- if .firebase}}
+<script defer src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
+
+<script type="text/javascript">
+  const firebaseConfig = {
+    apiKey: "{{.firebase.APIKey}}",
+    projectId: "{{.firebase.ProjectID}}",
+    authDomain: "{{.firebase.AuthDomain}}",
+    databaseURL: "https://{{.firebase.DatabaseURL}}",
+    projectId: "{{.firebase.ProjectID}}",
+    storageBucket: "{{.firebase.StorageBucket}}",
+    messagingSenderId: "{{.firebase.MessageSenderID}}",
+    appId: "{{.firebase.AppID}}"
+  };
+
+  window.addEventListener('load', () => {
+    firebase.initializeApp(firebaseConfig);
+
+    // Only store the firebase cookie for this browser tab duration. We still
+    // maintain a cookie on the server-side, but the firebase cookie needs to
+    // exist for certain account management pages.
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+  })
+</script>
+{{end}}
+{{end}}

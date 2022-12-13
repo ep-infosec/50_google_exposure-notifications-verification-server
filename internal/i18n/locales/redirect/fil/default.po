@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Language: fil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "login.about-exposure-notifications"
+msgstr "Tungkol sa Mga Notification sa Exposure"
+
+#
+# static pages
+# ----------
+
+
+msgid "static.not-found"
+msgstr "Hindi natagpuan"
+
+msgid "static.resource-does-not-exist"
+msgstr "Walang ganoong resource."
+
+msgid "static.redirect-not-found"
+msgstr "Para mag-redeem ng code para sa Mga Notification sa Exposure, bisitahin ang link sa iyong mobile device."
+
+msgid "static.unauthorized"
+msgstr "Hindi awtorisado"
+
+msgid "static.unauthorized-message"
+msgstr "Hindi ka awtorisadong gawin ang pagkilos na iyon."
+
+#
+# User report webview
+# ----------
+
+
+msgid "user-report.title"
+msgstr "Makakuha ng code sa pag-verify"
+
+msgid "user-report.navbar"
+msgstr "Humiling ng code sa pag-verify para sa Mga Notification sa Exposure"
+
+msgid "user-report.request-code-from"
+msgstr "Makakuha ng code sa pag-verify"
+
+msgid "user-report.instructions"
+msgstr "Kung nagpositibo ka sa COVID-19 pero hindi ka nakatanggap ng code mula sa iyong Awtoridad sa Kalusugan sa pamamagitan ng text o tawag sa telepono, puwede kang humiling nito dito."
+
+msgid "user-report.enter-date-instructions"
+msgstr "Ilagay ang petsa ng iyong COVID-19 test"
+
+msgid "user-report.phone-number-header"
+msgstr "Numero ng iyong Mobile Phone"
+
+msgid "user-report.phone-number-instructions"
+msgstr "Dapat kang maglagay ng valid na numero ng telepono para makatanggap ng code sa pag-verify. Posibleng may malapat na mga bayarin ng carrier."
+
+msgid "user-report.agreement-header"
+msgstr "Kasunduan"
+
+msgid "user-report.agreement"
+msgstr "Kinikilala kong nagpositibo ako sa resulta ng test para sa COVID-19 at na akin ang ibinigay kong numero ng telepono at na gusto kong makatanggap ng code para iulat ang positibo kong resulta."
+
+msgid "user-report.request-button"
+msgstr "Magpatuloy"
+
+msgid "user-report.code-issued"
+msgstr "Ibinigay ang code sa pag-verify"
+
+msgid "user-report.check-mobile-device"
+msgstr "Pakitingnan ang iyong mga text message sa mobile device mo."
+
+msgid "user-report.invalid-request"
+msgstr "Invalid na kahilingan, maglunsad mula sa iyong application na Mga Notification sa Exposure sa mobile device mo."
+
+msgid "user-report.not-available"
+msgstr "Hindi tumatanggap ang iyong lokal na awtoridad sa kalusugan ng mga ulat na sinimulan ng user sa ngayon."
+
+msgid "user-report.missing-agreement"
+msgstr "Dapat kang sumang-ayon sa mga tuntunin para humiling ng code sa pag-verify"
+
+msgid "user-report.error-invalid-date"
+msgstr "Invalid ang petsa ng COVID-19 test."
+
+msgid "user-report.error-missing-phone"
+msgstr "Kinakailangan ang numero ng telepono."
+
+msgid "user-report.error-invalid-phone"
+msgstr "Hindi valid ang numero ng mobile phone."
+
+msgid "user-report.quota-exceeded"
+msgstr "Pansamantalang hindi makapag-isyu ng mga code sa pag-verify, pakisubukan ulit mamaya."
+
+msgid "user-report.phone-not-eligible"
+msgstr "Hindi kasalukuyang kwalipikado ang iyong numero ng telepono para sa ulat ng user"
+
+msgid "user-report.internal-error"
+msgstr "Nagkaroon ng internal na error. Hindi makakahiling ng code sa pag-verify sa oras na ito."
+
+msgid "user-report.unable-to-issue"
+msgstr "Hindi kami makapagpadala sa iyo ng code sa pag-verify."
+
+msgid "user-report.code-device-throttled"
+msgstr "Masyadong marami ka nang beses na humiling ng code. Makipag-ugnayan sa iyong Awtoridad sa Kalusugan kung kailangan mo pa ng code."
+
+msgid "user-report.testing-date-label"
+msgstr "Petsa ng iyong COVID-19 Test"
+
+msgid "user-report.phone-storage"
+msgstr "Posibleng i-store ang isang bersyon ng numero ng iyong telepono na napoprotektahan ng cryptography para maiwasan ang mga karagdagang pagsusumite."
+
+msgid "user-report.learn-more"
+msgstr "Matuto pa..."
+
+msgid "user-report.header"
+msgstr "Tulungang Abisuhan ang Iba tungkol sa Exposure"
+
+msgid "user-report.phone-number-placeholder"
+msgstr "XXX XXX XXXX"
+

@@ -1,0 +1,151 @@
+{{define "loginscripts"}}
+<script type="text/javascript">
+  window.addEventListener('load', (event) => {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        return
+      }
+      setSession(user)
+    });
+
+    function setSession(user) {
+      user.getIdToken().then(idToken => {
+        $.ajax({
+          type: 'POST',
+          url: '/session',
+          data: {
+            idToken: idToken,
+          },
+          headers: { 'X-CSRF-Token': getCSRFToken() },
+          contentType: 'application/x-www-form-urlencoded',
+          {{if not .currentUser}}
+          success: function(returnData) {
+            // The user successfully signed in, redirect to realm selection.
+            window.location.assign('/login/select-realm');
+          },
+          {{end}}
+          error: function(xhr, status, e) {
+            // There was an error finding the user. Redirect to the
+            // sign-out page to clear the firebase cookie and any session
+            // data.
+            //
+            // The flash data may have more detailed error messages, which
+            // will be displayed on the signout page.
+            window.location.assign("/signout");
+          }
+        })
+      });
+    }
+  });
+</script>
+{{end}}
+
+{{define "login/pindiv"}}
+<form id="sms-code-form" action="/" method="POST">
+  <div class="card shadow-sm d-none" id="sms-code-div">
+    <div class="card-header">
+      <i class="bi bi-chat-left-dots me-2"></i>
+      SMS confirmation code
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="form-floating">
+            <input type="text" id="sms-code" name="sms-code" class="form-control" placeholder="Code"
+              autocomplete="off" autocorrect="off" spellcheck="off" required autofocus />
+            <label for="sms-code">Code</label>
+          </div>
+          <small class="text-muted d-block">
+            Enter the code that was dispatched to <strong id="factor-target"></strong> via SMS.
+            <a href="#" id="sms-code-resend" class="disabled" disabled>Resend SMS.</a>
+          </small>
+          <small class="text-muted d-block" id="code-text"></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer d-flex flex-column align-items-stretch align-items-lg-center flex-lg-row-reverse justify-content-lg-between">
+      <div class="d-grid d-lg-inline">
+        <button type="submit" id="sms-code-submit" class="btn btn-primary">Confirm code</button>
+      </div>
+      <div class="text-center text-lg-start">
+        <a href="#" id="sms-change" class="link-secondary small">
+          <i class="bi bi-arrow-left"></i>
+          Change login factor
+        </a>
+      </div>
+    </div>
+  </div>
+</form>
+{{end}}
+
+{{define "login/factorsdiv"}}
+<div class="card shadow-sm d-none" id="registered-div">
+  <div class="card-header">
+    <i class="bi bi-phone me-2"></i>
+    Registered factors
+  </div>
+  <div id="factors" class="list-group list-group-flush">
+    <div id="factor-template" class="d-none list-group-item list-group-item-action">
+      <div><strong class="factor-name"></strong></div>
+      <div class="factor-number text-muted"></div>
+    </div>
+  </div>
+</div>
+{{end}}
+
+{{define "login/pwd-validate"}}
+<div class="text-secondary">
+  {{if .requirements.HasRequirements}}
+    {{if gt .requirements.Length 0}}
+      <div id="length-req">
+        <i class="bi bi-exclamation-octagon-fill text-danger me-1"></i>
+        {{t $.locale "password.requirements-length" .requirements.Length}}
+      </div>
+    {{end}}
+    {{if gt .requirements.Uppercase 0}}
+      <div id="upper-req">
+        <i class="bi bi-exclamation-octagon-fill text-danger me-1"></i>
+        {{t $.locale "password.requirements-uppercase" .requirements.Uppercase}}
+      </div>
+    {{end}}
+    {{if gt .requirements.Lowercase 0}}
+      <div id="lower-req">
+        <i class="bi bi-exclamation-octagon-fill text-danger me-1"></i>
+        {{t $.locale "password.requirements-lowercase" .requirements.Lowercase}}
+      </div>
+    {{end}}
+    {{if gt .requirements.Number 0}}
+      <div id="num-req">
+        <i class="bi bi-exclamation-octagon-fill text-danger me-1"></i>
+        {{t $.locale "password.requirements-number" .requirements.Number}}
+      </div>
+    {{end}}
+    {{if gt .requirements.Special 0}}
+      <div id="special-req">
+        <i class="bi bi-exclamation-octagon-fill text-danger me-1"></i>
+        {{t $.locale "password.requirements-special" .requirements.Special}}
+      </div>
+    {{end}}
+  {{end}}
+  <div id="retyped">
+    <i class="bi bi-exclamation-octagon-fill text-danger me-1"></i>
+    {{t $.locale "password.requirements-match"}}
+  </div>
+</div>
+{{end}}
+
+{{define "login/requirements"}}
+  {{- if .requirements.HasRequirements}}
+  let requirements = {
+    'Length': {{.requirements.Length}},
+    'Uppercase': {{.requirements.Uppercase}},
+    'Lowercase': {{.requirements.Lowercase}},
+    'Number': {{.requirements.Number}},
+    'Special': {{.requirements.Special}},
+  };
+  {{else}}
+  let requirements = null;
+  {{end}}
+{{end}}

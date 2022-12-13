@@ -1,0 +1,70 @@
+{{define "apikeys/new"}}
+
+{{$authApp := .authApp}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="apikeys-new" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <form method="POST" action="/realm/apikeys">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header">
+          <i class="bi bi-key me-2"></i>
+          Details
+        </div>
+
+        <div class="card-body">
+          {{template "errorSummary" $authApp}}
+
+          {{ .csrfField }}
+
+          <div class="row g-3">
+            <div class="col-lg-12">
+              <div class="form-floating">
+                <input type="text" id="name" name="name" class="form-control {{invalidIf ($authApp.ErrorsFor "name")}}"
+                  value="{{$authApp.Name}}" autofocus>
+                <label for="name">Application name</label>
+                {{template "errorable" $authApp.ErrorsFor "name"}}
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="form-floating">
+                <input type="hidden" name="type" value="-1">
+                <select class="form-select {{invalidIf ($authApp.ErrorsFor "type")}}" name="type" id="type">
+                  <option selected disabled>Choose...</option>
+                  <option value="{{.typeDevice}}" {{selectedIf (eq $authApp.APIKeyType .typeDevice)}}>Device (can verify codes)</option>
+                  <option value="{{.typeAdmin}}" {{selectedIf (eq $authApp.APIKeyType .typeAdmin)}}>Admin (can issue codes)</option>
+                  <option value="{{.typeStats}}" {{selectedIf (eq $authApp.APIKeyType .typeStats)}}>Stats (can view statistics)</option>
+                </select>
+                <label for="type">Type</label>
+                {{template "errorable" $authApp.ErrorsFor "type"}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex flex-column align-items-stretch align-items-lg-center flex-lg-row-reverse justify-content-lg-between">
+          <div class="d-grid d-lg-inline">
+            <button type="submit" id="submit" class="btn btn-primary">Create API key</button>
+          </div>
+          <div class="d-grid d-lg-inline">
+            <a href="/realm/apikeys" class="btn btn-danger mt-2 mt-lg-0">
+              Cancel
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
+{{end}}

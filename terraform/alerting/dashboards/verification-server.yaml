@@ -1,0 +1,114 @@
+displayName: Verification Server
+gridLayout:
+  columns: "2"
+  widgets:
+    - title: SLO
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        thresholds:
+            - label: SLO Goal
+              value: 0.995
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                https_lb_rule::
+                loadbalancing.googleapis.com/https/request_count
+                | filter resource.backend_name = "apiserver"
+                | {
+                    filter metric.response_code_class = 200
+                    ;
+                    filter metric.response_code_class = 200 || metric.response_code_class = 500
+                }
+                | group_by [resource.backend_name]
+                | outer_join 0
+                | div
+    - title: Cloud Run Revision - Request Count (grouped) [SUM]
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                cloud_run_revision ::
+                run.googleapis.com/request_count
+                | align rate()
+                | every 1m
+                | [resource.service_name, metric.response_code_class]
+    - title: /api/issue/request count by result
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                generic_task ::
+                custom.googleapis.com/opencensus/en-verification-server/api/issue/request_count
+                | align rate()
+                | every 1m
+                | [metric.result]
+    - title: /api/issue request latency avg
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                generic_task ::
+                custom.googleapis.com/opencensus/en-verification-server/api/issue/request_latency
+                | align delta()
+                | every 1m
+                | group_by [], [value_request_latency_mean: mean(value.request_latency)]
+    - title: Rate Limited count by label.job [SUM]
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                generic_task ::
+                custom.googleapis.com/opencensus/en-verification-server/ratelimit/limitware/request_count
+                | filter metric.result == "RATE_LIMITED"
+                | align rate()
+                | every 1m
+                | [resource.job]
+    - title: Redis error count by label.job [SUM]
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                  fetch generic_task
+                  | metric 'custom.googleapis.com/opencensus/redis/client/errors'
+                  | align rate(1m)
+                  | every 1m
+                  | group_by [resource.job, metric.detail], [value_errors_aggregate: aggregate(value.errors)]
+    - title: Redis cache hit ratio [SUM]
+      xyChart:
+        chartOptions:
+          mode: COLOR
+        dataSets:
+          - plotType: LINE
+            targetAxis: Y1
+            timeSeriesQuery:
+              timeSeriesQueryLanguage: >
+                  fetch redis_instance
+                  | metric 'redis.googleapis.com/stats/cache_hit_ratio'
+                  | group_by 1m, [value_cache_hit_ratio_mean: mean(value.cache_hit_ratio)]
+                  | every 1m
+                  | group_by [],
+                  [value_cache_hit_ratio_mean_aggregate:
+                      aggregate(value_cache_hit_ratio_mean)]

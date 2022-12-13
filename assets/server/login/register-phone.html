@@ -1,0 +1,99 @@
+{{define "login/register-phone"}}
+
+{{$currentRealm := .currentRealm}}
+{{$mfaMode := .mfaMode}}
+{{$mfaEnabled := .mfaEnabled}}
+{{$currentMembership := .currentMembership}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+  {{template "firebase" .}}
+</head>
+
+<body id="login-register-phone" class="tab-content">
+  {{template "navbar" .}}
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <form id="register-form" action="/" method="POST">
+      <div class="card shadow-sm" id="register-div">
+        <div class="card-header">
+          <i class="bi bi-phone me-2"></i>
+          {{t $.locale "mfa.mfa"}}
+        </div>
+
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="form-floating">
+                <input type="text" id="display" name="display" class="form-control"
+                  placeholder="{{t $.locale "mfa.phone-display-name"}}" required autofocus />
+                <label for="display">{{t $.locale "mfa.phone-display-name"}}</label>
+                <small class="form-text text-muted">{{t $.locale "mfa.phone-display-name-help-text"}}</small>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-floating">
+                <input type="tel" id="phone" name="phone" class="form-control" required
+                  data-default-country="{{if .currentRealm}}{{.currentRealm.SMSCountry}}{{end}}" />
+                <small class="form-text text-muted">{{t $.locale "mfa.phone-number-help-text"}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex flex-column align-items-stretch align-items-lg-center flex-lg-row-reverse justify-content-lg-between">
+          <div class="d-grid d-lg-inline">
+            <button type="submit" id="submit-register" class="btn btn-primary">
+              {{t $.locale "mfa.enable-mfa"}}
+            </button>
+          </div>
+          <div class="text-center text-lg-start mt-3 mt-lg-0">
+            {{if $mfaMode}}
+              {{if ne $mfaMode.String "required"}}
+                <a id="skip" href="/login/post-authenticate" class="small link-danger">
+                  {{t $.locale "mfa.continue-without-mfa"}}
+                </a>
+              {{end}}
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </form>
+
+    {{template "login/pindiv" .}}
+
+    <div class="card shadow-sm mt-3" id="registered-div">
+      <div class="card-header">
+        <i class="bi bi-phone me-2"></i>
+        Registered factors
+      </div>
+      <div id="factors" class="list-group list-group-flush">
+        <div id="factor-template" class="d-none list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+          <div>
+            <strong><span class="factor-name"></span></strong>
+            (<span class="factor-number"></span>)
+            <div class="text-muted factor-enrolled"></div>
+          </div>
+          <div>
+            <a href="#" class="bi bi-trash link-danger" data-bs-toggle="tooltip" title="Delete this factor"></a>
+          </div>
+        </div>
+
+        <div id="factors-loading" class="d-flex align-items-center justify-content-center">
+          <div class="my-3 fst-italic">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="recaptcha-container" class="center-block"></div>
+  </div>
+</main>
+</body>
+
+</html>
+{{end}}

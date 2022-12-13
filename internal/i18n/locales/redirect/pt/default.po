@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "login.about-exposure-notifications"
+msgstr "Sobre as Notificações de Exposição"
+
+#
+# static pages
+# ----------
+
+
+msgid "static.not-found"
+msgstr "Não encontrado"
+
+msgid "static.resource-does-not-exist"
+msgstr "Esse recurso não existe."
+
+msgid "static.redirect-not-found"
+msgstr "Para resgatar um código de Notificações de Exposição, acesse o link no seu dispositivo móvel."
+
+msgid "static.unauthorized"
+msgstr "Sem autorização"
+
+msgid "static.unauthorized-message"
+msgstr "Você não tem autorização para realizar essa ação."
+
+#
+# User report webview
+# ----------
+
+
+msgid "user-report.title"
+msgstr "Receber um código de verificação"
+
+msgid "user-report.navbar"
+msgstr "Solicitar um código de verificação das Notificações de Exposição"
+
+msgid "user-report.request-code-from"
+msgstr "Receber um código de verificação"
+
+msgid "user-report.instructions"
+msgstr "Se um teste confirmou que você tem COVID-19, mas sua autoridade de saúde não enviou um código por mensagem de texto ou chamada telefônica, solicite um aqui."
+
+msgid "user-report.enter-date-instructions"
+msgstr "Informe a data do seu teste de COVID-19"
+
+msgid "user-report.phone-number-header"
+msgstr "Seu número de celular"
+
+msgid "user-report.phone-number-instructions"
+msgstr "Insira um número de telefone válido para receber um código de verificação. Sujeito à cobrança de tarifas da operadora."
+
+msgid "user-report.agreement-header"
+msgstr "Contrato"
+
+msgid "user-report.agreement"
+msgstr "Confirmo que recebi um resultado positivo para um teste de COVID-19 e que o número de telefone fornecido é meu. Quero receber um código para informar meu resultado positivo."
+
+msgid "user-report.request-button"
+msgstr "Continuar"
+
+msgid "user-report.code-issued"
+msgstr "Código de verificação emitido"
+
+msgid "user-report.check-mobile-device"
+msgstr "Confira suas mensagens de texto no dispositivo móvel."
+
+msgid "user-report.invalid-request"
+msgstr "Solicitação inválida. Abra o app Notificações de Exposição no seu dispositivo móvel."
+
+msgid "user-report.not-available"
+msgstr "Sua autoridade local de saúde não está aceitando relatórios iniciados pelo usuário no momento."
+
+msgid "user-report.missing-agreement"
+msgstr "Você precisa concordar com os termos para solicitar um código de verificação"
+
+msgid "user-report.error-invalid-date"
+msgstr "Data de teste de COVID-19 inválida."
+
+msgid "user-report.error-missing-phone"
+msgstr "É necessário fornecer um número de celular."
+
+msgid "user-report.error-invalid-phone"
+msgstr "Número de celular inválido."
+
+msgid "user-report.quota-exceeded"
+msgstr "No momento, não é possível emitir códigos de verificação. Tente novamente mais tarde."
+
+msgid "user-report.phone-not-eligible"
+msgstr "Seu número de telefone não está qualificado para o relatório do usuário"
+
+msgid "user-report.internal-error"
+msgstr "Ocorreu um erro interno. Não é possível solicitar um código de verificação no momento."
+
+msgid "user-report.unable-to-issue"
+msgstr "Não foi possível enviar um código de verificação para você."
+
+msgid "user-report.code-device-throttled"
+msgstr "Você solicitou um código muitas vezes. Entre em contato com a autoridade de saúde se ainda precisar de um código."
+
+msgid "user-report.testing-date-label"
+msgstr "Data do teste de COVID-19"
+
+msgid "user-report.phone-storage"
+msgstr "Uma versão do seu número de telefone protegida por criptografia pode ser armazenada para evitar mais envios."
+
+msgid "user-report.learn-more"
+msgstr "Saiba mais…"
+
+msgid "user-report.header"
+msgstr "Ajudar a notificar outras pessoas sobre a exposição"
+
+msgid "user-report.phone-number-placeholder"
+msgstr "(XX) XXXXX-XXXX"
+

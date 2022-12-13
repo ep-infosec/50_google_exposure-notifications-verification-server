@@ -1,0 +1,40 @@
+{{define "signout"}}
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+  {{template "firebase" .}}
+</head>
+
+<body id="login-signout">
+  {{template "navbar" .}}
+
+  <main id="signout" role="main" class="container">
+    <p id="signout-pending">
+      {{t $.locale "login.signing-out"}}
+    </p>
+    <p id="signout-error" class="d-none text-danger">
+      <i class="bi bi-x-circle-fill small pe-1"></i>
+      {{t $.locale "login.signing-out-error"}}
+    </p>
+  </main>
+
+  <script type="text/javascript">
+    window.addEventListener('load', () => {
+      let signoutPending = document.querySelector('p#signout-pending');
+      let signoutError = document.querySelector('p#signout-error');
+
+      firebase.auth().signOut().then(function() {
+        window.location.assign('/');
+      }).catch(function(err) {
+        console.error(err);
+        signoutPending.classList.add('d-none');
+        signoutError.classList.remove('d-none');
+      });
+    });
+  </script>
+</body>
+
+</html>
+{{end}}

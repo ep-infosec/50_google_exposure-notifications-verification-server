@@ -1,0 +1,101 @@
+{{define "report/header"}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="build-id" content="{{.buildID}}">
+<meta name="build-tag" content="{{.buildTag}}">
+
+<link rel="shortcut icon" href="/static/favicon.ico?{{.buildID}}">
+<meta name="theme-color" content="#ffffff">
+{{.csrfMeta}}
+
+{{if eq (printf "%s" $.textDirection) "rtl"}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.rtl.min.css"
+  integrity="sha512-+4ZGBJ8xSuGqgpJFWxrCPLm5FjQe5oVj/08JHPaiZTWRyHMUPMYD5SY92ff/AfmUoV92xo8SSHvkn58cBUw1GA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{{else}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
+  integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{{end}}
+
+<style>
+.ur-title {
+  font-size: calc(1.2rem + 4.5vw) !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+
+.ur-alert {
+  color: #0D3D17 !important;
+  background-color: #D6EBF0 !important;
+  border-color: transparent !important;
+}
+
+.rounded-corners {
+  border-radius: 20px;
+}
+
+.agreement {
+  border: 1px solid #C4C4C4 !important;
+}
+
+.agree-button {
+  border-radius: 25px;
+  border: 1px solid;
+}
+
+.pha-logo {
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.floating-field {
+  border-radius: 0px;
+  border: none;
+  border-bottom: 1px solid grey;
+}
+
+.continue-btn {
+  display: inline-block;
+  font-weight: 600;
+  line-height: 2;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  padding: 0.8rem, 0.75rem;
+  font-size: 1.25rem;
+  border-radius: 16px;
+}
+</style>
+
+<title>{{tDefault $.realmLocale .realm.Name "agencyDisplayName"}}</title>
+{{end}}
+
+{{define "errorable"}}
+{{if .}}
+<div class="invalid-feedback">
+  {{joinStrings . ", "}}
+</div>
+{{end}}
+{{end}}
+
+{{define "errorSummary"}}
+{{if $errs := .Errors}}
+  <div class="alert alert-danger mb-4" role="alert">
+    <p>
+      The following errors occurred:
+    </p>
+
+    <ul class="mb-1">
+      {{range $k, $v := $errs}}
+        {{range $e := $v}}
+          <li><strong>{{$k}}</strong> {{$e}}</li>
+        {{end}}
+      {{end}}
+    </ul>
+  </div>
+{{end}}
+{{end}}

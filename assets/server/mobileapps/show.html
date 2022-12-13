@@ -1,0 +1,71 @@
+{{define "mobileapps/show"}}
+
+{{$app := .app}}
+
+{{$currentMembership := .currentMembership}}
+{{$canWrite := $currentMembership.Can rbac.MobileAppWrite}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="mobileapps-show" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-window-sidebar me-2"></i>
+        Mobile app details
+        {{if $canWrite}}
+          <a href="/realm/mobile-apps/{{$app.ID}}/edit" class="float-end text-body" id="edit" data-bs-toggle="tooltip" title="Edit this mobile app">
+            <i class="bi bi-pencil-fill"></i>
+          </a>
+        {{end}}
+      </div>
+      <div class="card-body">
+        <dl class="mb-0">
+          <dt>App name</dt>
+          <dd id="mobileapps-name">{{$app.Name}}</dd>
+
+          <dt>AppStore link</dt>
+          <dd id="mobileapps-url"><a href="{{$app.URL | pathUnescape}}" rel="noopener noreferrer" target="_blank">{{$app.URL | pathUnescape}}</a></dd>
+
+          <dt>Enable AppStore redirect</dt>
+          <dd>{{not $app.DisableRedirect}}</dd>
+
+          <dt>OS</dt>
+          <dd id="mobileapps-os">
+            {{$app.OS.Display}}
+          </dd>
+
+          {{if $app.OS.IsIOS}}
+            <dt>Application ID</dt>
+            <dd id="mobileapps-app-id" class="font-monospace">{{$app.AppID}}</dd>
+          {{end}}
+
+          {{if $app.OS.IsAndroid}}
+            <dt>Package name</dt>
+            <dd id="mobileapps-package-name" class="font-monospace">{{$app.AppID}}</dd>
+
+            <dt>SHA</dt>
+            <dd id="mobileapps-sha" class="font-monospace">{{$app.SHA}}</dd>
+
+            {{if $app.Headless}}
+              <dt>Headless</dt>
+              <dd id="mobileapps-headless" class="font-monospace">EN Express headless (settings-based app)</dd>
+            {{end}}
+          {{end}}
+        </dl>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
+{{end}}

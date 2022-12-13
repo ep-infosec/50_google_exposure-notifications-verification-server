@@ -1,0 +1,91 @@
+{{define "account"}}
+
+{{$user := .currentUser}}
+{{$currentMemberships := .currentMemberships}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+</head>
+
+<body id="account">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    {{template "flash" .}}
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-person me-2"></i>
+        {{t $.locale "account.header-details"}}
+      </div>
+      <div class="card-body">
+        <h6 class="card-title">{{t $.locale "account.full-name" }}</h6>
+        <div class="card-text mb-3">
+          {{$user.Name}}
+        </div>
+
+        <h6 class="card-title">{{t $.locale "login.email-address"}}</h6>
+        <div class="card-text">
+          {{$user.Email}}
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header">
+        <i class="bi bi-shield-lock me-2"></i>
+        {{t $.locale "account.header-authentication"}}
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          {{if .emailVerified}}
+            <i class="bi bi-check-square-fill text-success me-1"></i>
+            {{t $.locale "account.email-verified"}}
+          {{else}}
+            <i class="bi bi-x-square-fill text-danger me-1"></i>
+            {{t $.locale "account.email-not-verified"}}
+            <a href="/login/manage-account?mode=verifyEmail" class="float-end">{{t $.locale "account.verify-email-address"}}</a>
+          {{end}}
+        </li>
+        <li class="list-group-item">
+          {{if .mfaEnabled}}
+            <i class="bi bi-check-square-fill text-success me-1"></i>
+            {{t $.locale "account.mfa-enabled"}}
+            <a href="/login/register-phone" class="float-end">{{t $.locale "account.manage-mfa"}}</a>
+          {{else}}
+            <i class="bi bi-x-square-fill text-danger me-1"></i>
+            {{t $.locale "account.mfa-disabled"}}
+            <a href="/login/register-phone" class="float-end">{{t $.locale "account.enable-mfa"}}</a>
+          {{end}}
+        </li>
+        <li class="list-group-item">
+          <i class="bi bi-clock text-secondary me-1"></i>
+          {{t $.locale "account.password-last-changed" $user.PasswordAgeString}}
+          <a href="/login/change-password" class="float-end">{{t $.locale "account.change-password"}}</a>
+        </li>
+      </ul>
+    </div>
+
+    {{if $currentMemberships}}
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header">
+          <i class="bi bi-house-door me-2"></i>
+          {{t $.locale "account.header-realm-memberships"}}
+        </div>
+        <ul class="list-group list-group-flush">
+          {{range $membership := $currentMemberships}}
+          <li class="list-group-item">
+            {{$membership.Realm.Name}}
+          </li>
+          {{end}}
+        </ul>
+      </div>
+    {{end}}
+  </main>
+</body>
+
+</html>
+{{end}}

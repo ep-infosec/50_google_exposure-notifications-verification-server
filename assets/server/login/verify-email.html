@@ -1,0 +1,104 @@
+{{define "login/verify-email"}}
+
+{{$currentRealm := .currentRealm}}
+
+<!doctype html>
+<html dir="{{$.textDirection}}" lang="{{$.textLanguage}}">
+
+<head>
+  {{template "head" .}}
+  {{template "firebase" .}}
+</head>
+
+<body id="verify-email" class="tab-content">
+  {{template "navbar" .}}
+
+  <main role="main" class="container">
+    <div class="d-flex vh-100">
+      <div class="d-flex w-100 justify-content-center">
+        <div class="login-container">
+          {{template "flash" .}}
+
+        <form method="POST" id="verify-email">
+          {{ .csrfField }}
+
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <i class="bi bi-envelope me-2"></i>
+              {{t $.locale "account.verify-email-address"}}
+            </div>
+
+            <div class="card-body">
+              <p class="mb-0">
+                {{if not $currentRealm}}
+                  <!-- This is only for system admins, skip i18n. -->
+                  Email address verification is required.
+                {{else}}
+                  {{t $.locale "account.verify-email-address-required" $currentRealm.Name}}
+                {{end}}
+              </p>
+            </div>
+
+            <div class="card-footer d-flex flex-column align-items-stretch align-items-lg-center flex-lg-row-reverse justify-content-lg-between">
+              <div class="d-grid d-lg-inline">
+                <button type="submit" id="verify-button" class="btn btn-primary" disabled>
+                  {{t $.locale "account.verify-email-address"}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+          {{if $currentRealm}}
+            {{if ne $currentRealm.EmailVerifiedMode.String "required"}}
+              <div class="d-flex justify-content-center pt-2">
+                <a id="skip" class="text-muted small" href="/login/post-authenticate">
+                  {{t $.locale "account.continue-without-verifying-email-address"}}
+                </a>
+              </div>
+            {{end}}
+          {{end}}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {{if .firebase}}
+  <script type="text/javascript">
+    window.addEventListener('load', (event) => {
+      let form = document.querySelector('form#verify-email');
+      let btnVerify = document.querySelector('button#verify-button');
+
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+          window.location.assign('/signout');
+          return;
+        }
+
+        // If the email is already verified, move along.
+        if (user.emailVerified) {
+          flash.clear();
+          flash.alert('Your email address is already verified.');
+          // window.location.assign('/login/post-authenticate');
+          return;
+        }
+
+        // Get an ID token and embed it onto the page.
+        user.getIdToken().then(idToken => {
+          let idTokenField = document.createElement('input');
+          idTokenField.setAttribute('type', 'hidden');
+          idTokenField.setAttribute('name', 'idToken');
+          idTokenField.value = idToken;
+          form.appendChild(idTokenField);
+
+          // Now that we have a user, enable the form.
+          btnVerify.disabled = false;
+        });
+      });
+    });
+  </script>
+  {{end}}
+</body>
+
+</html>
+{{end}}
